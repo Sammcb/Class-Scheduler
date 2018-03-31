@@ -1,0 +1,12 @@
+#First command for both operating systems
+python3 setup.py build
+
+#Second command for Mac
+python3 setup.py bdist_mac --qt-menu-nib=/usr/local/Cellar/qt/5.7.1_1/plugins/platforms/ --custom-info-plist Info-highres.plist
+
+	#The program must be moved in order to work
+
+#Second command for Windows
+python setup.py bdist_msi
+
+	#Must be run as administrator the first time
