@@ -1,6 +1,6 @@
 # Class-Scheduler
 
-A desktop application written in Python using the QT framework that allows a user to input parameters and generate schedules for students and teachers. Inputs the user can provide are:
+A desktop application written in Python using the QT framework that allows a user to input parameters and automatically generate schedules for students and teachers. Inputs the user can provide are:
   * Teachers
   * Students
   * Classes
