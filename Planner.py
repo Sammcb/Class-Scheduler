@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 import sys
+import csv
 import os
 import json
 import uuid
@@ -104,6 +105,8 @@ class Planner(QMainWindow):
         self.new = QMenu("New", self.fileMenu,)
         self.open = QMenu("Open", self.fileMenu)
 
+        self.importMenu = QMenu("Import", self.fileMenu)
+
         self.schoolAction = QAction("School", self)
         self.schoolAction.setShortcut("Shift+Ctrl+N")
         self.schoolAction.triggered.connect(self.openSchool)
@@ -136,6 +139,9 @@ class Planner(QMainWindow):
         self.gradeAction.setShortcut("Ctrl+G")
         self.gradeAction.triggered.connect(self.openGrade)
 
+        self.importStudentsAction = QAction("Students", self)
+        self.importStudentsAction.triggered.connect(self.importStudents)
+
         self.fileMenu.addMenu(self.new)
         self.new.addAction(self.schoolAction)
         self.new.addAction(self.yearAction)
@@ -145,6 +151,24 @@ class Planner(QMainWindow):
         self.new.addAction(self.roomAction)
         self.new.addAction(self.timeScheduleAction)
         self.new.addAction(self.gradeAction)
+
+        self.fileMenu.addMenu(self.importMenu)
+        self.importMenu.addAction(self.importStudentsAction)
+
+    def importStudents(self):
+        options = QFileDialog.Options()
+        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "","CSV Files (*.csv)", options=options)
+        with open(fileName, newline='') as csvFile:
+            studentReader = csv.reader(csvFile)
+            next(studentReader)
+            for line in csvFile:
+                uniqueId = str(uuid.uuid4())
+                studentName = line.strip()
+                studentEntry = NewStudent(studentName, uniqueId)
+                self.school.students.append(studentEntry.returnAsDict())
+                self.mainWidgets.saveFile()
+
+        self.mainWidgets.addStudentsToTree()
 
 class PlannerWidgets(QWidget):
 
